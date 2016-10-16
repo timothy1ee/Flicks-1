@@ -16,6 +16,15 @@ class UIConstants: NSObject {
     
     static let errorRed = UIColor(red: 255/255, green: 148/255, blue: 148/255, alpha: 1)
     
-    
+    static func formatReleaseDate(releaseDate: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from: releaseDate)
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        let formatted = dateFormatter.string(from: date!)
+        return formatted
+    }
 
+    
 }

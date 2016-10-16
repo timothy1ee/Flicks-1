@@ -9,16 +9,24 @@
 import UIKit
 import MBProgressHUD
 
-class NowPlayingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var movieTableView: UITableView!
     
     var errorMsgLabel = UILabel()
     
     var movies: [NSDictionary]?
+    
+    var endpoint: String?
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("loading \(endpoint)")
+        
+        self.navigationController?.navigationBar.barTintColor = UIConstants.primaryColor
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: .valueChanged)
@@ -56,7 +64,7 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource, UITable
     
     func refresh(handler: @escaping (Bool) -> ()) {
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        NetworkUtil.getNowPlayingMovies(successHandler: { (task, responseObject) in
+        NetworkUtil.getMovies(endpoint: endpoint!, successHandler: { (task, responseObject) in
             
             MBProgressHUD.hide(for: self.view, animated: true)
             let responseDict = responseObject as! NSDictionary
@@ -109,6 +117,8 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource, UITable
         cell.titleLabel.textColor = UIConstants.secondaryColor
         cell.overviewLabel.text = overview
         cell.overviewLabel.textColor = UIConstants.secondaryColor
+        
+        cell.selectionStyle = .none
         
         return cell
     }
