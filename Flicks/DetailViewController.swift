@@ -20,8 +20,8 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     
-    
-    
+    @IBOutlet weak var votingLabel: UILabel!
+
     @IBOutlet weak var infoView: UIView!
     
     
@@ -47,10 +47,18 @@ class DetailViewController: UIViewController {
         self.overviewLabel.text = overview
         self.overviewLabel.sizeToFit()
                 
-        let releaseDate = movie["release_date"] as! String
-        let formattedDate = UIConstants.formatReleaseDate(releaseDate: releaseDate)
-        self.releaseDateLabel.text = formattedDate
-        self.releaseDateLabel.adjustsFontSizeToFitWidth = true
+        let releaseDateString = movie["release_date"] as? String
+        if let releaseDate = releaseDateString {
+            let formattedDate = UIConstants.formatReleaseDate(releaseDate: releaseDate)
+            self.releaseDateLabel.text = formattedDate
+            self.releaseDateLabel.adjustsFontSizeToFitWidth = true
+        }
+        
+        let voteAverageDouble = movie["vote_average"] as? Double
+        if let voteAverage = voteAverageDouble {
+            let formattedVote = "\(voteAverage)/10.00"
+            self.votingLabel.text = formattedVote
+        }
         
         if let posterPath = movie["poster_path"] as? String {
             let imageURL = URL(string: "\(NetworkUtil.poster_base_url)\(posterPath)")

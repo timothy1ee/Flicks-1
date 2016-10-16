@@ -108,6 +108,13 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SN8-GU-iQX">
+                                                <frame key="frameInset" minX="163" minY="50" width="101" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
@@ -124,6 +131,7 @@
                         <outlet property="releaseDateLabel" destination="co6-8b-tdu" id="p9l-zu-SmB"/>
                         <outlet property="scrollView" destination="1ML-eg-Kaw" id="IoU-Qp-WoB"/>
                         <outlet property="titleLabel" destination="c2J-Tf-gnu" id="DTe-KN-Ddf"/>
+                        <outlet property="votingLabel" destination="SN8-GU-iQX" id="szJ-fQ-TCV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S0O-CP-DR8" userLabel="First Responder" sceneMemberID="firstResponder"/>
