@@ -2,7 +2,7 @@
 
 **Flicks** is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **5** hours spent in total
+Time spent: **6** hours spent in total
 
 ## User Stories
 
@@ -28,6 +28,7 @@ The following **additional** features are implemented:
 
 - [x] Use official Movie DB theme colors
 - [x] Display movie release date in a human readable format
+- [x] Display movie voting average
 
 ## Video Walkthrough
 
@@ -39,7 +40,18 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+1. I didn't have much experience working with Storyboard directly. I found manually dragging and moving UI components a little bit inconvenient. But I got used to it very quickly. There is some limitations to Storyboard such as you cannot put a UISearchBar on the NavigationItem. I had to do this programmatically. Another thing I found more easier doing things programmatically is subviews. With code, it is very easy to see when and where a specific view is being added to a subview. However in Storyboard it just kind of works magically. Even though Storyboard does work for almost everything else, I still believe in doing everything programtically is much more easier to deal with : )
+
+2. This is my first time implementing a UITabBarController. The structure has now been very clear to me: UITabBarController -> UINavigationController -> UIViewController.
+
+3. I didn't solve the issue where TableView will load "wrong" images first and then suddenly change to the correct ones. It is because TableViewCells are being reused. I tried setting image of the cell to nil in cellForRow but it didn't work.
+
+4. No auto-layout is implemented.
+
+5. I didn't have much time to work on the CollectionView. I will update it once I have time.
+
+6. I spent a lot of time learning ScrollView. The contentSize property of the ScrollView is a little hard to understand.
+
 
 ## License
 

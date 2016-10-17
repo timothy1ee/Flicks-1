@@ -120,7 +120,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             let imageURLRequest_low = URLRequest(url: imageURL_low!)
             let imageURL_high = URL(string: "\(NetworkUtil.poster_base_url_high_res)\(posterPath)")
             let imageURLRequest_high = URLRequest(url: imageURL_high!)
-
             
             cell.posterImage.setImageWith(imageURLRequest_low, placeholderImage: nil, success: { (lowResImageRequest, lowResImageResponse, lowResImage) in
                 
@@ -145,13 +144,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 }, failure: { (request, response, error) in
                     // error handling
             })
-            
-            
-            
-            
-            
-            
-            
         } else {
             cell.posterImage.image = nil
         }
