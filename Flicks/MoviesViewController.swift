@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var movieTableView: UITableView!
     
@@ -18,11 +18,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var movies: [NSDictionary]?
     
     var endpoint: String?
-        
+    
+    var movieSearchBar: UISearchBar?
+    
+    var filteredMovies: [NSDictionary]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("loading \(endpoint)")
         
         self.navigationController?.navigationBar.barTintColor = UIConstants.primaryColor
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
@@ -45,8 +47,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         movieTableView.dataSource = self
         movieTableView.delegate = self
         
+        self.movieSearchBar = UISearchBar()
+        self.movieSearchBar?.sizeToFit()
+        self.navigationItem.titleView = self.movieSearchBar
+        self.movieSearchBar?.delegate = self
+        self.movieSearchBar?.tintColor = UIConstants.primaryColor
+                
         refresh { (result) in
             if (result) {
+                self.filteredMovies = self.movies
                 self.movieTableView.reloadData()
             }
         }
@@ -89,8 +98,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = self.movies {
-            return movies.count
+        if let filteredMovies = self.filteredMovies {
+            return filteredMovies.count
         } else {
             return 0
         }
@@ -101,14 +110,48 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         cell.backgroundColor = UIConstants.primaryColor
         
-        let movie = self.movies![indexPath.row]
+        let movie = self.filteredMovies![indexPath.row]
         
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
         
         if let posterPath = movie["poster_path"] as? String {
-            let imageURL = URL(string: "\(NetworkUtil.poster_base_url)\(posterPath)")
-            cell.posterImage.setImageWith(imageURL!)
+            let imageURL_low = URL(string: "\(NetworkUtil.poster_base_url_low_res)\(posterPath)")
+            let imageURLRequest_low = URLRequest(url: imageURL_low!)
+            let imageURL_high = URL(string: "\(NetworkUtil.poster_base_url_high_res)\(posterPath)")
+            let imageURLRequest_high = URLRequest(url: imageURL_high!)
+
+            
+            cell.posterImage.setImageWith(imageURLRequest_low, placeholderImage: nil, success: { (lowResImageRequest, lowResImageResponse, lowResImage) in
+                
+                cell.posterImage.alpha = 0.0
+                cell.posterImage.image = lowResImage
+                print("setting low res image")
+                
+                UIView.animate(withDuration: 1.0, animations: { 
+                    cell.posterImage.alpha = 1.0
+                    }, completion: { (success) in
+                        
+                        cell.posterImage.setImageWith(imageURLRequest_high, placeholderImage: nil, success: { (highResImageRequest, highResImageResponse, highResImage) in
+                            
+                            cell.posterImage.image = highResImage
+                            print("setting high res image")
+                            
+                            }, failure: { (request, response, error) in
+                                // error handling
+                        })
+                })
+                
+                }, failure: { (request, response, error) in
+                    // error handling
+            })
+            
+            
+            
+            
+            
+            
+            
         } else {
             cell.posterImage.image = nil
         }
@@ -128,7 +171,36 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Search Bar
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if (searchText.isEmpty) {
+            self.filteredMovies = self.movies
+        } else {
+            // The user has entered text into the search box
+            // Use the filter method to iterate over all items in the data array
+            // For each item, return true if the item should be included and false if the
+            // item should NOT be included
+            
+            self.filteredMovies = self.movies?.filter({ (movie: NSDictionary) -> Bool in
+                
+                let movieTitle = movie["title"] as! String
+                if movieTitle.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil {
+                    return true
+                } else {
+                    return false
+                }
+            })
+        }
+        self.movieTableView.reloadData()
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
 
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
     
     // MARK: - Navigation
 
@@ -136,6 +208,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        self.movieSearchBar?.resignFirstResponder()
         
         let cell = sender as! UITableViewCell
         let indexPath = self.movieTableView.indexPath(for: cell)

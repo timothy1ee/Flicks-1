@@ -24,7 +24,6 @@ class DetailViewController: UIViewController {
 
     @IBOutlet weak var infoView: UIView!
     
-    
     var movie: NSDictionary!
 
     override func viewDidLoad() {
@@ -61,13 +60,11 @@ class DetailViewController: UIViewController {
         }
         
         if let posterPath = movie["poster_path"] as? String {
-            let imageURL = URL(string: "\(NetworkUtil.poster_base_url)\(posterPath)")
+            let imageURL = URL(string: "\(NetworkUtil.poster_base_url_high_res)\(posterPath)")
             self.posterImageView.setImageWith(imageURL!)
         } else {
             self.posterImageView.image = nil
         }
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
