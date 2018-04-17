@@ -56,9 +56,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         refresh { (result) in
             if (result) {
                 self.filteredMovies = self.movies
-                self.movieTableView.reloadData()
             }
         }
+        self.movieTableView.reloadData()
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -112,8 +112,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         let movie = self.filteredMovies![indexPath.row]
         
-        let title = movie["title"] as! String
-        let overview = movie["overview"] as! String
+        let title = movie["Title"] as! String
+        let overview = movie["Overview"] as? String
         
         if let posterPath = movie["poster_path"] as? String {
             let imageURL_low = URL(string: "\(NetworkUtil.poster_base_url_low_res)\(posterPath)")
@@ -148,8 +148,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             cell.posterImage.image = nil
         }
 
-        cell.titleLabel.text = title
-        cell.titleLabel.textColor = UIConstants.secondaryColor
+        cell.textLabel?.text = title
+        cell.textLabel?.textColor = UIConstants.secondaryColor
         cell.overviewLabel.text = overview
         cell.overviewLabel.textColor = UIConstants.secondaryColor
         
