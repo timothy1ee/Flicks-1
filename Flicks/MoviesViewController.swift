@@ -27,7 +27,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.barTintColor = UIConstants.primaryColor
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.tintColor = UIColor.white
         
         let refreshControl = UIRefreshControl()
@@ -61,7 +61,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.movieTableView.reloadData()
     }
     
-    func refreshControlAction(refreshControl: UIRefreshControl) {
+    @objc func refreshControlAction(refreshControl: UIRefreshControl) {
         
         refresh { (result) in
             refreshControl.endRefreshing()
